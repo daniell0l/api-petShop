@@ -23,11 +23,11 @@ class Produto {
 
   validar() {
     if (typeof this.titulo !== 'string' || this.titulo.length === 0) {
-      throw new Error('O campo titulo esta invalido')
+      throw new Error('O campo titulo está inválido')
     }
 
     if (typeof this.preco !== 'number' || this.preco === 0) {
-      throw new Error('O campo preco está invalido')
+      throw new Error('O campo preco está inválido')
     }
   }
 
@@ -37,7 +37,7 @@ class Produto {
       titulo: this.titulo,
       preco: this.preco,
       estoque: this.estoque,
-      fornrecedor: this.fornecedor
+      fornecedor: this.fornecedor
     })
 
     this.id = resultado.id
@@ -58,6 +58,38 @@ class Produto {
     this.dataCriacao = produto.dataCriacao
     this.dataAtualizacao = produto.dataAtualizacao
     this.versao = produto.versao
+  }
+
+  atualizar() {
+    const dadosParaAtualizar = {}
+
+    if (typeof this.titulo === 'string' && this.titulo.length > 0) {
+      dadosParaAtualizar.titulo = this.titulo
+    }
+
+    if (typeof this.preco === 'number' && this.preco > 0) {
+      dadosParaAtualizar.preco = this.preco
+    }
+
+    if (typeof this.estoque === 'number') {
+      dadosParaAtualizar.estoque = this.estoque
+    }
+
+    if (Object.keys(dadosParaAtualizar).length === 0) {
+      throw new Error('Não foram fornecidos dados para atualizar')
+    }
+
+    return Tabela.atualizar(
+      {
+        id: this.id,
+        fornecedor: this.fornecedor
+      },
+      dadosParaAtualizar
+    )
+  }
+
+  diminuirEstoque() {
+    return Tabela.subtrair(this.id, this.fornecedor, 'estoque', this.estoque)
   }
 }
 
